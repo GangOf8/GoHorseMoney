@@ -1,19 +1,25 @@
 ﻿namespace HorseMoney.Domain.Common;
 
-public class BaseResponse<T>
+public class BaseResponse<T>(T? data, Error error)
 {
-    public T? Data { get; set; }
-    public Error Error { get; set; }
+    #region Properties
 
-    public BaseResponse(T data)
+    public T? Data { get; set; } = data;
+    public Error Error { get; set; } = Error.None;
+
+    #endregion Properties
+
+    #region Constructors
+
+    public BaseResponse(T data) : this(data, Error.None)
     {
         Data = data;
-        Error = Error.None;
     }
 
-    public BaseResponse(Error error)
+    public BaseResponse(Error error) : this(default, error)
     {
-        Data = default;
         Error = error;
     }
+
+    #endregion Constructors
 }
