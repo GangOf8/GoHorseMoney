@@ -15,6 +15,4 @@ public class Wallet : BaseEntity
     [MaxLength(100)]
     [Column(TypeName = "VARCHAR")]
     public string Name { get; set; }
-
-    
 }

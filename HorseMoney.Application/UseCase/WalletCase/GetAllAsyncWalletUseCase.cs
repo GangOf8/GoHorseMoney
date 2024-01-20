@@ -3,8 +3,10 @@ using HorseMoney.Domain.Dto;
 using HorseMoney.Domain.Dto.WalletDto;
 using HorseMoney.Domain.Entities;
 using HorseMoney.Domain.Interfaces.WalletInterfaces;
+using HorseMoney.Domain.Messages;
 using HorseMoney.Infrastructure.Repository.WalletRepository;
 using Mapster;
+using System.Net;
 
 namespace HorseMoney.Application.UseCase.WalletCase
 {
@@ -20,9 +22,12 @@ namespace HorseMoney.Application.UseCase.WalletCase
         public async Task<BasicResult<List<WalletDto>>> Execute(PageableDto input)
         {
             List<Wallet> wallets = await _walletRepository.GetAllAsync(input.skip, input.skip * input.take);
-            List<WalletDto> walletDtos = wallets.Adapt<List<WalletDto>>();
-
-            return BasicResult.Success(walletDtos);
+            if (wallets.Count is 0)
+            {
+                return BasicResult.Failure<List<WalletDto>>(new(HttpStatusCode.NotFound, CommonMessage.NoRecordsFound));
+            }
+         
+            return wallets.Adapt<List<WalletDto>>();
         }
     }
 }
