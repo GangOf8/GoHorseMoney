@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HorseMoney.Presentation.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 public class CategoryController(ICreateCategoryUseCase createCategoryUseCase) : BaseController
 {
     [HttpPost]
