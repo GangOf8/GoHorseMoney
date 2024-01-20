@@ -13,9 +13,13 @@ namespace HorseMoney.Infrastructure.Repository.WalletRepository
             _context = dbContext;
         }
 
-        public async Task<IList<Wallet>> GetAllAsync(int skip = 0, int take = 25)
+        public async Task<List<Wallet>> GetAllAsync(int skip = 0, int take = 25)
         {
-            return await _context.Set<Wallet>().AsNoTracking().Skip(skip).Take(take).ToListAsync();
+            return await _context.Set<Wallet>()
+                .AsNoTracking()
+                .Skip(skip)
+                .Take(take)
+                .ToListAsync();
         }
     }
 }

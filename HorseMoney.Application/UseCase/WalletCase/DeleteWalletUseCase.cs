@@ -25,15 +25,15 @@ namespace HorseMoney.Application.UseCase.WalletCase
 
         #endregion Constructors
 
-        public async Task<BasicResult> Execute(WalletIdDto input)
+        public async Task<BasicResult> Execute(Guid id)
         {
-            BasicResult<WalletDto> walletDto = await _getByIdWalletUseCase.Execute(input.Id);
+            BasicResult<WalletDto> walletDto = await _getByIdWalletUseCase.Execute(id);
             if (walletDto.IsFailure)
             {
                 return walletDto;
             }
 
-            await _walletRepository.DeleteById(input.Id);
+            await _walletRepository.DeleteById(id);
 
             return BasicResult.Success();
         }

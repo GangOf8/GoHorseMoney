@@ -5,7 +5,7 @@ using HorseMoney.Domain.UseCase;
 
 namespace HorseMoney.Domain.Interfaces.WalletInterfaces
 {
-    public interface IGetAllAsyncWalletUseCase : IUseCaseBase<PageableDto, BasicResult<IList<WalletDto>>>
+    public interface IGetAllAsyncWalletUseCase : IUseCaseBase<PageableDto, BasicResult<List<WalletDto>>>
     {
     }
 }

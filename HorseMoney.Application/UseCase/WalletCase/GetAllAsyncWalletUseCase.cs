@@ -17,10 +17,10 @@ namespace HorseMoney.Application.UseCase.WalletCase
             _walletRepository = walletRepository;
         }
 
-        public async Task<BasicResult<IList<WalletDto>>> Execute(PageableDto input)
+        public async Task<BasicResult<List<WalletDto>>> Execute(PageableDto input)
         {
-            IList<Wallet> wallets = await _walletRepository.GetAllAsync(input.skip, input.skip * input.take);
-            IList<WalletDto> walletDtos = wallets.Select(s => s.Adapt<WalletDto>()).ToList();
+            List<Wallet> wallets = await _walletRepository.GetAllAsync(input.skip, input.skip * input.take);
+            List<WalletDto> walletDtos = wallets.Adapt<List<WalletDto>>();
 
             return BasicResult.Success(walletDtos);
         }
