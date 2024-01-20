@@ -4,15 +4,16 @@ using System.Reflection;
 using HorseMoney.Infrastructure.Identity;
 using System.Reflection.Emit;
 using System.Linq.Expressions;
+using HorseMoney.Domain.Entities;
 
 namespace HorseMoney.Infrastructure.Data;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-    
-    
-    
+
+    DbSet<Wallet> Wallet { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

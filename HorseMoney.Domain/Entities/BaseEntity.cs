@@ -13,7 +13,7 @@ public abstract class BaseEntity
 
     public void Update()
     {
-        UpdatedAt = DateTime.Now;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     #endregion Methods
