@@ -3,7 +3,7 @@ using HorseMoney.Domain.Dto.WalletDto;
 
 namespace HorseMoney.Domain.Interfaces.Wallet
 {
-    public interface ICreateWalletUseCase : IUseCaseBase<WalletDto, BasicResult>
+    public interface ICreateWalletUseCase : IUseCaseBase<WalletCreateDto, BasicResult>
     {
     }
 }

@@ -16,7 +16,7 @@ namespace HorseMoney.Application.UseCase.WalletCase
             _walletRepository = walletRepository;
         }
 
-        public async Task<BasicResult> Execute(WalletDto input)
+        public async Task<BasicResult> Execute(WalletCreateDto input)
         {
             Wallet walletMapped = input.Adapt<Wallet>();
             await _walletRepository.Add(walletMapped);

@@ -51,16 +51,15 @@ namespace HorseMoney.Infrastructure.Repository
         {
             return await _dbContext
                 .Set<T>()
+                .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<T> Update(T entity)
         {
-            _dbContext
-                .Set<T>()
-                .Update(entity);
-
+            _dbContext.Update<T>(entity);
             await _dbContext.SaveChangesAsync();
+
             return entity;
         }
     }

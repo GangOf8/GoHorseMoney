@@ -35,7 +35,7 @@ namespace HorseMoney.Presentation.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(string))]
-        public async Task<ActionResult<BasicResult>> Create([FromBody] WalletDto walletCreateDto)
+        public async Task<ActionResult<BasicResult>> Create([FromBody] WalletCreateDto walletCreateDto)
         {
             var result = await _createWallet.Execute(walletCreateDto);
             return ResponseBase(HttpStatusCode.Created, result, CommonMessage.OperationSucess);
@@ -49,7 +49,7 @@ namespace HorseMoney.Presentation.Controllers
             return ResponseBase(HttpStatusCode.OK, result);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         public async Task<ActionResult<BasicResult>> Delete([FromRoute] Guid id)
         {
@@ -57,7 +57,7 @@ namespace HorseMoney.Presentation.Controllers
             return ResponseBase(HttpStatusCode.OK, result, CommonMessage.OperationSucess);
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WalletDto))]
         public async Task<ActionResult<BasicResult>> GetById([FromRoute] Guid id)
         {
@@ -67,7 +67,7 @@ namespace HorseMoney.Presentation.Controllers
 
         [HttpGet("all")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WalletDto>))]
-        public async Task<ActionResult<BasicResult>> GetAll([FromQuery] int skip, [FromQuery] int take)
+        public async Task<ActionResult<BasicResult>> GetAll([FromQuery] int skip = 0, [FromQuery] int take = 25)
         {
             var result = await _getAll.Execute(new(skip, take));
             return ResponseBase(HttpStatusCode.OK, result);
