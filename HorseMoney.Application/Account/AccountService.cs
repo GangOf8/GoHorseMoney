@@ -1,11 +1,17 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Net;
+using System.Security.Claims;
+using System.Text;
 using CleanArchitecture.Infrastructure.Identity;
 using HorseMoney.Application.Models;
 using HorseMoney.Domain.Common;
+using HorseMoney.Domain.Dto.Account;
 using HorseMoney.Domain.Interfaces;
 using HorseMoney.Infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace HorseMoney.Application.Account;
 
@@ -47,5 +53,39 @@ public class AccountService : IAccountService
         // }
 
         return (result.ToApplicationResult(), user.Id);
+    }
+    public async Task<BasicResult> LoginAsync(LoginDto loginDto)
+    {
+        var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
+        if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
+        {
+            return BasicResult.Failure(new Error(HttpStatusCode.Unauthorized,"Unauthorized, Please check your Email or Password  and try again."));
+        }
+        
+        var token = GenerateJwtToken(user);
+
+        return BasicResult.Success(token);
+    }
+    
+    private string GenerateJwtToken(ApplicationUser user)
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Secret"]));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            _configuration["JwtSettings:Issuer"],
+            _configuration["JwtSettings:Audience"],
+            new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
+            },
+            expires: DateTime.UtcNow.AddHours(2),
+            signingCredentials: credentials
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

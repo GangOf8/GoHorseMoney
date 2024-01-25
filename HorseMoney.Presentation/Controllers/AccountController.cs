@@ -1,5 +1,9 @@
+using System.Net;
 using HorseMoney.Application.Models;
+using HorseMoney.Domain.Common;
+using HorseMoney.Domain.Dto.Account;
 using HorseMoney.Domain.Interfaces;
+using HorseMoney.Presentation.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +11,7 @@ namespace HorseMoney.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseController
     { 
        
         private readonly IAccountService _accountService;
@@ -36,9 +40,12 @@ namespace HorseMoney.Presentation.Controllers
         }
         
         [HttpPost("login")]
-        public async Task<IActionResult> Login()
+        public async Task<ActionResult<BasicResult>> Login(LoginDto loginDto)
         {
-            return Ok();
+            var result =  await _accountService.LoginAsync(loginDto);
+            
+            return ResponseBase<BasicResult>(HttpStatusCode.Accepted, result);
+     
         }
         
         [HttpPost("forgotpassword")]

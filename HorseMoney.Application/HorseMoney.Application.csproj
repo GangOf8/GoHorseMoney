@@ -9,6 +9,7 @@
     <ItemGroup>
       <PackageReference Include="FluentValidation" Version="11.9.0" />
       <PackageReference Include="Mapster" Version="7.4.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
         <PrivateAssets>all</PrivateAssets>
@@ -19,6 +20,12 @@
     <ItemGroup>
       <ProjectReference Include="..\HorseMoney.Domain\HorseMoney.Domain.csproj" />
       <ProjectReference Include="..\HorseMoney.Infrastructure\HorseMoney.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="System.Configuration.ConfigurationManager">
+        <HintPath>..\..\..\.nuget\packages\system.configuration.configurationmanager\7.0.0\lib\net7.0\System.Configuration.ConfigurationManager.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>
