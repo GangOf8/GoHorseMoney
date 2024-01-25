@@ -6,6 +6,7 @@ using Mapster;
 using System.Net;
 using HorseMoney.Domain.Dto.WalletDto;
 using HorseMoney.Domain.Interfaces.WalletInterfaces;
+using HorseMoney.Domain.Messages;
 
 namespace HorseMoney.Application.UseCase.WalletCase
 {
@@ -31,7 +32,7 @@ namespace HorseMoney.Application.UseCase.WalletCase
             Wallet? walletEntity = await _walletRepository.GetById(input);
             if(walletEntity is null)
             {
-                return BasicResult.Failure<WalletDto>(new Error(HttpStatusCode.NotFound, "Id not found"));
+                return BasicResult.Failure<WalletDto>(new Error(HttpStatusCode.NotFound, CommonMessage.NoRecordsFound));
             }
 
             return walletEntity.Adapt<WalletDto>();            

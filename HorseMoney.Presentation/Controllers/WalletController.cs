@@ -1,12 +1,11 @@
 ﻿using HorseMoney.Domain.Common;
-using HorseMoney.Presentation.Abstractions;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using HorseMoney.Domain.Dto.WalletDto;
 using HorseMoney.Domain.Interfaces.Wallet;
 using HorseMoney.Domain.Interfaces.WalletInterfaces;
-using HorseMoney.Domain.Dto;
 using HorseMoney.Domain.Messages;
+using HorseMoney.Presentation.Abstractions;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace HorseMoney.Presentation.Controllers
 {
@@ -20,10 +19,10 @@ namespace HorseMoney.Presentation.Controllers
         private readonly IUpdateWalletUseCase _updateWallet;
 
         public WalletController(
-            ICreateWalletUseCase createWallet, 
-            IDeleteWalletUseCase deleteWallet, 
-            IGetAllAsyncWalletUseCase getAll, 
-            IGetByIdWalletUseCase getById, 
+            ICreateWalletUseCase createWallet,
+            IDeleteWalletUseCase deleteWallet,
+            IGetAllAsyncWalletUseCase getAll,
+            IGetByIdWalletUseCase getById,
             IUpdateWalletUseCase updateWallet)
         {
             _createWallet = createWallet;
@@ -35,38 +34,43 @@ namespace HorseMoney.Presentation.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<BasicResult>> Create([FromBody] WalletDto walletCreateDto)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(string))]
+        public async Task<ActionResult<BasicResult>> Create([FromBody] WalletCreateDto walletCreateDto)
         {
             var result = await _createWallet.Execute(walletCreateDto);
             return ResponseBase(HttpStatusCode.Created, result, CommonMessage.OperationSucess);
         }
 
         [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WalletDto))]
         public async Task<ActionResult<BasicResult>> Update([FromBody] WalletUpdateDto walletUpdateDto)
         {
             var result = await _updateWallet.Execute(walletUpdateDto);
-            return ResponseBase(HttpStatusCode.Accepted, result);
+            return ResponseBase(HttpStatusCode.OK, result);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         public async Task<ActionResult<BasicResult>> Delete([FromRoute] Guid id)
         {
             var result = await _deleteWallet.Execute(id);
-            return ResponseBase(HttpStatusCode.Accepted, result, CommonMessage.OperationSucess);
+            return ResponseBase(HttpStatusCode.OK, result, CommonMessage.OperationSucess);
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WalletDto))]
         public async Task<ActionResult<BasicResult>> GetById([FromRoute] Guid id)
         {
             var result = await _getById.Execute(id);
-            return ResponseBase(HttpStatusCode.Accepted, result);
+            return ResponseBase(HttpStatusCode.OK, result);
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<BasicResult>> GetAll([FromQuery] int skip, [FromQuery] int take)
-        {       
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WalletDto>))]
+        public async Task<ActionResult<BasicResult>> GetAll([FromQuery] int skip = 0, [FromQuery] int take = 25)
+        {
             var result = await _getAll.Execute(new(skip, take));
-            return ResponseBase(HttpStatusCode.Accepted, result);
+            return ResponseBase(HttpStatusCode.OK, result);
         }
     }
 }

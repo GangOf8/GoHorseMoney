@@ -7,6 +7,7 @@ using HorseMoney.Domain;
 using HorseMoney.Infrastructure.Repository.WalletRepository;
 using Mapster;
 using System.Net;
+using System.Collections;
 
 namespace HorseMoney.Application.UseCase.WalletCase
 {
@@ -32,13 +33,14 @@ namespace HorseMoney.Application.UseCase.WalletCase
 
         public async Task<BasicResult<WalletDto>> Execute(WalletUpdateDto input)
         {
-            BasicResult<WalletDto> walletDto = await _getByIdWalletUseCase.Execute(input.Id);
+            BasicResult<WalletDto> walletDto = await _getByIdWalletUseCase.Execute(input.id);
             if (walletDto.IsFailure)
             {
                 return walletDto;
             }
 
-            Wallet wallet = walletDto.Value.Adapt<Wallet>();
+            WalletDto walletDto1 = walletDto.Value;
+            Wallet wallet = walletDto1.Adapt<Wallet>();
             Update(input, wallet);
 
             await _walletRepository.Update(wallet);
@@ -48,12 +50,12 @@ namespace HorseMoney.Application.UseCase.WalletCase
 
         private BasicResult Update(WalletUpdateDto walletDto, Wallet wallet)
         {
-            if (string.IsNullOrWhiteSpace(walletDto.Name))
+            if (string.IsNullOrWhiteSpace(walletDto.name))
             {
                 return BasicResult.Failure(new Error(HttpStatusCode.BadRequest, "Name is null or empty"));
             }
 
-            wallet.Name = walletDto.Name;
+            wallet.Name = walletDto.name;
             return BasicResult.Success();
         }
     }

@@ -4,6 +4,6 @@ namespace Domain.UnitTests.WalletTest.Common
 {
     public static class WalletConstants
     {
-        public static WalletDto VALID_WALLET_CREATE_DTO = new WalletDto("VALID WALLET NAME");
+        public static WalletCreateDto VALID_WALLET_CREATE_DTO = new WalletCreateDto("VALID WALLET NAME");
     }
 }
