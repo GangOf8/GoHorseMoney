@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using FluentValidation.Results;
 using HorseMoney.Application.UseCase.CategoryUseCase.Validators;
+using HorseMoney.Application.UseCase.Validator;
 using HorseMoney.Domain.Common;
 using HorseMoney.Domain.Dto.Categories;
 using HorseMoney.Domain.Entities;
@@ -32,10 +33,7 @@ public class CreateCategoryUseCase : ICreateCategoryUseCase
     public async Task<BasicResult> Execute(CreateCategoryDto input)
     {
         ValidationResult validations = await _createValidator.ValidateAsync(input);
-        if (!validations.IsValid)
-        {
-            return BasicResult.Failure(HttpStatusCode.NotFound, validations.Errors);
-        }
+        DefaultValidator.ValidateDto(validations);
 
         Category categoryMapped = input.Adapt<Category>();
         await _categoryRepository.Add(categoryMapped);

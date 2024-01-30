@@ -11,6 +11,7 @@ namespace HorseMoney.Presentation.Middlewares
             try
             {
                 await next(context);
+             
             }
             catch (Exception error)
             {
